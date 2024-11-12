@@ -73,6 +73,13 @@ const index = () => {
                     <Text style={styles.signInLinkText}>Forgot Password</Text>
                   </Pressable>
                 </View>
+                <View style={styles.signInContainer}>
+                  <Pressable onPress={() => router.push("/home")}>
+                    <Text style={styles.signInLinkText}>
+                      Test Link to go to Home Page
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>

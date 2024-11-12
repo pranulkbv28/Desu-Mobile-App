@@ -37,4 +37,6 @@ export const Colors = {
     secondary: secondaryColorDark,
     accent: accentColor,
   },
+  gray: "#7d7d7d",
+  appGreen: "#37673a",
 };
