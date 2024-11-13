@@ -49,7 +49,7 @@ const index = () => {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                backgroundColor: "rgba(128, 128, 128, 0.7)", // Adjust 0.7 for more/less transparency
+                backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust 0.7 for more/less transparency
               }}
             >
               <View

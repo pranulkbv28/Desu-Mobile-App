@@ -7,12 +7,15 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import restaurantData from "@/data/restaurantData";
 import AppHeader from "@/components/AppHeader";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Colors } from "@/constants/Colors";
+import OrderDetailContainer from "@/components/OrderDetailContainer";
+import { useDispatch } from "react-redux";
+import { setOrderDetails } from "@/features/orderSlice/orderSlice";
 
 // Define types for restaurant and dish data
 type Dish = {
@@ -35,6 +38,7 @@ type Restaurant = {
 const Index = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const restaurant: Restaurant | undefined = restaurantData.find(
     (item) => item.id === Number(id)
@@ -43,7 +47,8 @@ const Index = () => {
   // State to track the quantities for each dish
   const [quantities, setQuantities] = useState<{ [key: number]: number }>(
     restaurant?.menu.reduce((acc, dish) => {
-      acc[dish.id] = 1; // Initial quantity is 1 for each dish
+      acc[dish.id] = 0; // Initial quantity is 1 for each dish
+      console.log("This is acc: ", acc);
       return acc;
     }, {} as { [key: number]: number }) || {}
   );
@@ -56,11 +61,38 @@ const Index = () => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
       [dishId]: Math.max(
-        1,
+        0,
         prevQuantities[dishId] + (type === "increment" ? 1 : -1)
       ),
     }));
   };
+
+  useEffect(() => {
+    console.log(quantities);
+  }, [quantities]);
+
+  useEffect(() => {
+    const orderArray = Object.entries(quantities).map(([key, value]) => ({
+      key,
+      value,
+    }));
+
+    const newOrderArray = orderArray.filter((ele) => ele.value >= 1);
+
+    dispatch(
+      setOrderDetails({
+        restaurantId: restaurant?.id,
+        restaurantName: restaurant?.name,
+        orders: newOrderArray,
+      })
+    );
+
+    console.log({
+      restaurantId: restaurant?.id,
+      restaurantName: restaurant?.name,
+      orders: newOrderArray,
+    });
+  }, [quantities]);
 
   if (!restaurant) {
     return (
@@ -130,6 +162,9 @@ const Index = () => {
           </View>
         ))}
       </ScrollView>
+      {Object.values(quantities).some((qty) => qty >= 1) ? (
+        <OrderDetailContainer />
+      ) : null}
     </>
   );
 };
@@ -137,7 +172,7 @@ const Index = () => {
 export default Index;
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
+  container: { padding: 20, paddingBottom: 200 },
   headerContainer: {
     paddingHorizontal: 20,
     paddingTop: 20,
@@ -219,7 +254,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     alignItems: "center",
-    marginVertical: 10,
+    marginBottom: 30,
     padding: 10,
     backgroundColor: Colors.white.background,
     borderRadius: 10,

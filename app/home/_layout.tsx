@@ -6,10 +6,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { StatusBar, StyleSheet } from "react-native";
 import AppHeader from "@/components/AppHeader";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "@/store/store";
+import OrderDetailContainer from "@/components/OrderDetailContainer";
 
 export default () => {
+  const orders = useSelector((state: any) => state.order.orderDetails);
+
   return (
     <>
       <AppHeader />
@@ -67,6 +70,7 @@ export default () => {
           }}
         />
       </Tabs>
+      {orders.orders.length > 0 ? <OrderDetailContainer /> : null}
     </>
   );
 };
