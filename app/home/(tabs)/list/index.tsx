@@ -1,12 +1,22 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import restaurantData from "@/data/restaurantData";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 
 const index = () => {
   console.log(restaurantData);
+
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -18,15 +28,12 @@ const index = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {restaurantData.map((restaurant) => (
-          <View
+          <TouchableOpacity
+            onPress={() => router.push(`/restaurants/${restaurant.id}`)}
             style={{
-              // borderWidth: 1,
-              // borderColor: Colors.white.text,
-              // padding: 10,
               width: "100%",
               height: 200,
               marginBottom: 30,
-              // borderRadius: 10,
               position: "relative",
             }}
             key={restaurant.id}
@@ -42,15 +49,13 @@ const index = () => {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                backgroundColor: "rgba(128, 128, 128, 0.7)", // Adjust 0.5 for more/less transparency
+                backgroundColor: "rgba(128, 128, 128, 0.7)", // Adjust 0.7 for more/less transparency
               }}
             >
               <View
                 style={{
                   position: "absolute",
                   bottom: 10,
-                  // left: 10,
-                  // color: "white",
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
@@ -68,13 +73,6 @@ const index = () => {
                     }}
                   >
                     {restaurant.name}
-                    {/* {"\n"}
-                Price for two: 
-                {"\n"}
-                Rating: {restaurant.stars} ⭐{"\n"}
-                Distance: 
-                {"\n"}
-                Location: {restaurant.location} */}
                   </Text>
                   <Text
                     style={{
@@ -122,7 +120,7 @@ const index = () => {
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>

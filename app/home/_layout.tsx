@@ -12,63 +12,61 @@ import store from "@/store/store";
 export default () => {
   return (
     <>
-      <Provider store={store}>
-        <AppHeader />
-        <Tabs
-          screenOptions={{
-            tabBarActiveTintColor: Colors.white.background,
-            tabBarInactiveTintColor: Colors.gray,
-            headerShown: false,
-            tabBarStyle: {
-              backgroundColor: Colors.appGreen,
-              paddingBottom: 10,
-              paddingTop: 10,
-              height: 60,
-            },
+      <AppHeader />
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors.white.background,
+          tabBarInactiveTintColor: Colors.gray,
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: Colors.appGreen,
+            paddingBottom: 10,
+            paddingTop: 10,
+            height: 60,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Home",
+            tabBarLabel: "Home",
+            tabBarIcon: ({ color, size }) => (
+              <Entypo name="home" size={size} color={color} />
+            ),
           }}
-        >
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: "Home",
-              tabBarLabel: "Home",
-              tabBarIcon: ({ color, size }) => (
-                <Entypo name="home" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="(tabs)/list/index"
-            options={{
-              title: "List",
-              tabBarLabel: "List",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="book-outline" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="(tabs)/menu/index"
-            options={{
-              title: "Menu",
-              tabBarLabel: "Menu",
-              tabBarIcon: ({ color, size }) => (
-                <FontAwesome6 name="bowl-food" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="(tabs)/inbox/index"
-            options={{
-              title: "Inbox",
-              tabBarLabel: "Inbox",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="mail-outline" size={size} color={color} />
-              ),
-            }}
-          />
-        </Tabs>
-      </Provider>
+        />
+        <Tabs.Screen
+          name="(tabs)/list/index"
+          options={{
+            title: "List",
+            tabBarLabel: "List",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="book-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="(tabs)/menu/index"
+          options={{
+            title: "Menu",
+            tabBarLabel: "Menu",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome6 name="bowl-food" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="(tabs)/inbox/index"
+          options={{
+            title: "Inbox",
+            tabBarLabel: "Inbox",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="mail-outline" size={size} color={color} />
+            ),
+          }}
+        />
+      </Tabs>
     </>
   );
 };
