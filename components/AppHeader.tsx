@@ -45,12 +45,14 @@ const AppHeader = () => {
         </View>
         <Entypo name="menu" size={24} color={Colors.white.background} />
       </View>
-      <View style={styles.textInputContainer}>
-        <TextInput style={styles.textInput} placeholder="Search for food" />
-        <View style={styles.searchIconContainer}>
-          <AntDesign name="search1" size={24} color="black" />
+      {!currentPath.includes("restaurants") && (
+        <View style={styles.textInputContainer}>
+          <TextInput style={styles.textInput} placeholder="Search for food" />
+          <View style={styles.searchIconContainer}>
+            <AntDesign name="search1" size={24} color="black" />
+          </View>
         </View>
-      </View>
+      )}
       {currentPath === "home" && <ImageCarousel />}
     </View>
   );
