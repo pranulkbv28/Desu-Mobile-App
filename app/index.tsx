@@ -35,7 +35,7 @@ export default function Index() {
     ]).start();
 
     setTimeout(() => {
-      router.replace("/auth/sign-up");
+      router.replace("/home/(tabs)/list");
     }, 3000);
   }, [fadeInD, fadeInE, fadeInS, fadeInU]);
 
