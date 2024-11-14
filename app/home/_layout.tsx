@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { Tabs } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -9,9 +9,27 @@ import AppHeader from "@/components/AppHeader";
 import { Provider, useSelector } from "react-redux";
 import store from "@/store/store";
 import OrderDetailContainer from "@/components/OrderDetailContainer";
+import { retrieveData } from "@/utils/AsyncStorage";
 
 export default () => {
-  const orders = useSelector((state: any) => state.order.orderDetails);
+  const [orders, setOrders] = useState({
+    restaurantId: Number("") || undefined,
+    restaurantName: String("") || undefined,
+    orders: [] as any[],
+  });
+
+  const stateData = useSelector((state: any) => state.order.orderDetails);
+
+  const getData = async () => {
+    const data = await retrieveData();
+    console.log("This is the data: ", data);
+    setOrders(data);
+  };
+
+  useEffect(() => {
+    getData();
+    console.log("This is the orders in OrderDetailContainer: ", orders);
+  }, [stateData]);
 
   return (
     <>
