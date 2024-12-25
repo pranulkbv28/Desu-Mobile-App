@@ -8,7 +8,12 @@ const index = () => {
 
   return (
     <View>
-      <Pressable onPress={() => clearData()}>
+      <Pressable
+        onPress={() => {
+          clearData();
+          console.log(data);
+        }}
+      >
         <Button title="Clear Order" />
       </Pressable>
     </View>
