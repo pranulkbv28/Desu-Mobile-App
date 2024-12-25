@@ -6,14 +6,16 @@ import { useSelector } from "react-redux";
 const OrderDetailContainer = () => {
   const orders = useSelector((state: any) => state.order.orderDetails);
 
-  console.log(
-    "This is the orders in OrderDetailContainer: ",
-    orders.orders.length
-  );
+  const totalItems = orders.orders
+    .map((ele: any) => ele["value"])
+    .reduce((acc: any, ele: any) => acc + ele, 0);
 
   return (
     <View style={styles.container}>
-      <Text>You have ordered {orders.orders.length} items</Text>
+      <Text style={styles.text}>
+        You have ordered <Text style={styles.highlight}>{totalItems}</Text>{" "}
+        items
+      </Text>
     </View>
   );
 };
@@ -23,6 +25,21 @@ export default OrderDetailContainer;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white.background,
-    padding: 30,
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    margin: 20,
+  },
+  text: {
+    fontSize: 18,
+    color: Colors.gray,
+  },
+  highlight: {
+    fontWeight: "bold",
+    color: Colors.appGreen,
   },
 });
