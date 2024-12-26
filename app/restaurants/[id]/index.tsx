@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder, addItemToOrder } from "@/features/orderSlice/newOrderSlice";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams, useSegments } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Colors } from "@/constants/Colors";
@@ -40,8 +40,12 @@ type Restaurant = {
 const Index = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const segments = useSegments();
+  const currentPath = segments.join("/");
   const dispatch = useDispatch();
   const currentOrder = useSelector((state: any) => state.newOrder);
+
+  console.log("Current Path from Restaurant details: ", currentPath);
 
   const restaurant: Restaurant | undefined = restaurantData.find(
     (item) => item.id === Number(id)

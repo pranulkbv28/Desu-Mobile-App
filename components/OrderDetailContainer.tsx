@@ -36,6 +36,11 @@ const OrderDetailContainer = ({
     .reduce((total: any, dishQty: any) => total + dishQty, 0);
 
   const handlePress = () => {
+    console.log("handlePress called");
+    console.log("restaurantId:", restaurantId);
+    console.log("currentOrderRestaurantId:", currentOrderRestaurantId);
+    console.log("page:", page);
+
     if (restaurantId && currentOrderRestaurantId) {
       if (restaurantId === currentOrderRestaurantId) {
         console.log("Entering null if statement");
@@ -44,13 +49,21 @@ const OrderDetailContainer = ({
       } else {
         console.log("Entering else statement after null if");
         setMessage("Go to Restaurant");
+        console.log(
+          "This is currentOrderRestaurantId: ",
+          currentOrderRestaurantId
+        );
         router.push(`/restaurants/${currentOrderRestaurantId}`);
       }
     } else {
       if (page === "home") {
         console.log("Entering home if statement");
-        setMessage("Go to Restaurant");
-        router.push(`/restaurants/${currentOrderRestaurantId}`);
+        setMessage("Go to Restaurant from list");
+        console.log(
+          "This is currentOrderRestaurantId: ",
+          currentOrderRestaurantId
+        );
+        router.push(`/restaurants/${newOrders.restaurantId}`);
       } else {
         console.log("Entering home else statement");
         setMessage("Something went wrong");
@@ -74,7 +87,7 @@ const OrderDetailContainer = ({
             ? "Go to Checkout"
             : "Go to Restaurant"
           : page === "home"
-          ? "Go to Restaurant"
+          ? "Go to Restaurant from list"
           : "Something went wrong"}
       </Text>
     </TouchableOpacity>
