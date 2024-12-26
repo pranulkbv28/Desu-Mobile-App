@@ -45,7 +45,7 @@ const OrderDetailContainer = ({
       if (restaurantId === currentOrderRestaurantId) {
         console.log("Entering null if statement");
         setMessage("Go to Checkout");
-        null;
+        router.push("/checkout");
       } else {
         console.log("Entering else statement after null if");
         setMessage("Go to Restaurant");
