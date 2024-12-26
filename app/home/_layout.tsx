@@ -12,6 +12,9 @@ import OrderDetailContainer from "@/components/OrderDetailContainer";
 
 export default () => {
   const orders = useSelector((state: any) => state.order.orderDetails);
+  const newOrders = useSelector((state: any) => state.newOrder.orderDetails);
+
+  console.log("This is the new order in Home: ", newOrders.length);
 
   return (
     <>
@@ -70,7 +73,7 @@ export default () => {
           }}
         />
       </Tabs>
-      {orders.orders.length > 0 ? <OrderDetailContainer /> : null}
+      {newOrders.length > 0 ? <OrderDetailContainer page="home" /> : null}
     </>
   );
 };
