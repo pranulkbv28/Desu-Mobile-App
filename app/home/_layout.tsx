@@ -12,24 +12,10 @@ import OrderDetailContainer from "@/components/OrderDetailContainer";
 import { retrieveData } from "@/utils/AsyncStorage";
 
 export default () => {
-  const [orders, setOrders] = useState({
-    restaurantId: Number("") || undefined,
-    restaurantName: String("") || undefined,
-    orders: [] as any[],
-  });
+  const orders = useSelector((state: any) => state.order.orderDetails);
+  const newOrders = useSelector((state: any) => state.newOrder.orderDetails);
 
-  const stateData = useSelector((state: any) => state.order.orderDetails);
-
-  const getData = async () => {
-    const data = await retrieveData();
-    console.log("This is the data: ", data);
-    setOrders(data);
-  };
-
-  useEffect(() => {
-    getData();
-    console.log("This is the orders in OrderDetailContainer: ", orders);
-  }, [stateData]);
+  console.log("This is the new order in Home: ", newOrders.length);
 
   return (
     <>
@@ -88,7 +74,7 @@ export default () => {
           }}
         />
       </Tabs>
-      {orders.orders.length > 0 ? <OrderDetailContainer /> : null}
+      {newOrders.length > 0 ? <OrderDetailContainer page="home" /> : null}
     </>
   );
 };

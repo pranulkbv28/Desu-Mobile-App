@@ -1,25 +1,25 @@
+import React, { useEffect, useState } from "react";
 import {
-  Image,
-  Pressable,
+  View,
+  Text,
   ScrollView,
   StyleSheet,
-  Text,
+  TouchableOpacity,
+  Image,
+  Pressable,
+  Button,
   TextInput,
-  View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import restaurantData from "@/data/restaurantData";
-import AppHeader from "@/components/AppHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { setOrder, addItemToOrder } from "@/features/orderSlice/newOrderSlice";
+import { useRouter, useLocalSearchParams, useSegments } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Colors } from "@/constants/Colors";
 import OrderDetailContainer from "@/components/OrderDetailContainer";
-import { useDispatch } from "react-redux";
-import { setOrderDetails } from "@/features/orderSlice/orderSlice";
-import { retrieveData, storeData } from "@/utils/AsyncStorage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import restaurantData from "@/data/restaurantData";
+import AppHeader from "@/components/AppHeader";
 
-// Define types for restaurant and dish data
 type Dish = {
   id: number;
   name: string;
@@ -41,22 +41,30 @@ const Index = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   console.log("This is id: ", id);
   const router = useRouter();
+  const segments = useSegments();
+  const currentPath = segments.join("/");
   const dispatch = useDispatch();
-  const [asyncStoreData, setAsyncStoreData] = useState({
-    restaurantId: Number("") || undefined,
-    restaurantName: String("") || undefined,
-    orders: [] as any[],
-  });
+  const currentOrder = useSelector((state: any) => state.newOrder);
+
+  console.log("Current Path from Restaurant details: ", currentPath);
 
   const restaurant: Restaurant | undefined = restaurantData.find(
     (item) => item.id === Number(id)
   );
 
+  console.log(
+    "This is newOrder in Restaurant Index: ",
+    currentOrder.orderDetails
+  );
+  console.log("This is restaurant: ", restaurant);
+
   // State to track the quantities for each dish
   const [quantities, setQuantities] = useState<{ [key: number]: number }>(
     restaurant?.menu.reduce((acc, dish) => {
-      acc[dish.id] = 0; // Initial quantity is 1 for each dish
-      // console.log("This is acc: ", acc);
+      console.log("This is acc in acc: ", acc);
+      console.log("This is dish in acc: ", dish);
+      console.log("This is acc[dish.id] in acc: ", acc[dish.id]);
+      acc[dish.id] = 0; // Initial quantity is 0 for each dish
       return acc;
     }, {} as { [key: number]: number }) || {}
   );
@@ -116,30 +124,53 @@ const Index = () => {
   }, [quantities]);
 
   // Handler to update quantity
-  const handleQuantityChange = (
-    dishId: number,
-    type: "increment" | "decrement"
-  ) => {
+  const handleQuantityChange = (dishId: number, quantity: number) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [dishId]: Math.max(
-        0,
-        prevQuantities[dishId] + (type === "increment" ? 1 : -1)
-      ),
+      [dishId]: quantity,
     }));
+
+    console.log("This is current order: ", currentOrder.restaurantId);
+    console.log("This is restaurant id: ", restaurant?.id);
+    console.log(
+      "Checking if the restaurant ID is different: ",
+      currentOrder.restaurantId === String(restaurant?.id)
+    );
+
+    // If the restaurant ID is different, update the order
+    if (currentOrder.restaurantId !== String(restaurant?.id)) {
+      console.log("Entering if in handleQuantityChange");
+      dispatch(
+        setOrder({ restaurantId: String(restaurant?.id), orderDetails: [] })
+      );
+    }
+
+    // Add item to order if quantity is greater than 0
+    if (quantity > 0) {
+      const dish = restaurant?.menu.find((item) => item.id === dishId);
+      console.log("This is dish: ", dish);
+      if (dish) {
+        dispatch(addItemToOrder({ dish, quantity }));
+      }
+    }
   };
 
-  // useEffect(() => {
-  //   console.log(quantities);
-  // }, [quantities]);
-
-  if (!restaurant) {
-    return (
-      <View style={styles.container}>
-        <Text>Restaurant not found</Text>
-      </View>
+  function getQuantity(dishName: string, dishId: number) {
+    const dishIndex = currentOrder.orderDetails.findIndex(
+      (ele: any) => ele.dish.id === dishId && ele.dish.name === dishName
     );
+    if (dishIndex === -1) {
+      return 0;
+    } else {
+      return currentOrder.orderDetails[dishIndex].quantity;
+    }
   }
+
+  console.log("This is restaurantId in Index: ", restaurant?.id);
+  console.log(
+    "This is currentOrderRestaurantId in Index: ",
+    currentOrder.restaurantId
+  );
 
   return (
     <>
@@ -155,25 +186,27 @@ const Index = () => {
           />
         </View>
       </View>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.titleContainer}>
           <Image
-            source={restaurant.menu[0].image}
+            source={restaurant?.menu[0].image}
             style={styles.restaurantImage}
           />
           <View style={styles.overlay}>
-            <Text style={styles.restaurantName}>{restaurant.name}</Text>
+            <Text style={styles.restaurantName}>{restaurant?.name}</Text>
             <Text style={styles.restaurantDescription}>
-              "{restaurant.description}"
+              "{restaurant?.description}"
             </Text>
-            <Text style={styles.restaurantLocation}>{restaurant.location}</Text>
+            <Text style={styles.restaurantLocation}>
+              {restaurant?.location}
+            </Text>
             <Text style={styles.restaurantPriceForTwo}>
-              Price for Two: {restaurant.priceForTwo}
+              Price for Two: {restaurant?.priceForTwo}
             </Text>
           </View>
         </View>
 
-        {restaurant.menu.map((dish) => (
+        {restaurant?.menu.map((dish) => (
           <View key={dish.id} style={styles.dishContainer}>
             <View style={styles.dishImageContainer}>
               <Image source={dish.image} style={styles.dishImage} />
@@ -183,25 +216,44 @@ const Index = () => {
               <Text style={styles.dishDescription}>{dish.description}</Text>
               <View style={styles.dishOrderDetailsContainer}>
                 <Text style={styles.dishPrice}>{dish.price}</Text>
-                <View style={styles.ordervalueContainer}>
-                  <Pressable
-                    onPress={() => handleQuantityChange(dish.id, "decrement")}
-                  >
-                    <Text style={styles.orderQty}>-</Text>
-                  </Pressable>
-                  <Text style={styles.orderAmount}>{quantities[dish.id]}</Text>
-                  <Pressable
-                    onPress={() => handleQuantityChange(dish.id, "increment")}
-                  >
-                    <Text style={styles.orderQty}>+</Text>
-                  </Pressable>
+                <View
+                  style={
+                    getQuantity(dish.name, dish.id) > 0
+                      ? styles.ordervalueContainer
+                      : styles.ordervalueContainerNull
+                  }
+                >
+                  <Button
+                    title="Add"
+                    onPress={() =>
+                      handleQuantityChange(
+                        dish.id,
+                        getQuantity(dish.name, dish.id) + 1
+                      )
+                    }
+                  />
+                  <Text>{getQuantity(dish.name, dish.id)}</Text>
+                  <Button
+                    title="Remove"
+                    onPress={() =>
+                      handleQuantityChange(
+                        dish.id,
+                        Math.max(getQuantity(dish.name, dish.id) - 1, 0)
+                      )
+                    }
+                  />
                 </View>
               </View>
             </View>
           </View>
         ))}
       </ScrollView>
-      {asyncStoreData?.orders?.length >= 1 ? <OrderDetailContainer /> : null}
+      {currentOrder.orderDetails.length > 0 ? (
+        <OrderDetailContainer
+          restaurantId={restaurant?.id}
+          currentOrderRestaurantId={Number(currentOrder.restaurantId)}
+        />
+      ) : null}
     </>
   );
 };
@@ -328,6 +380,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     backgroundColor: "red",
+    padding: 10,
+    borderRadius: 8,
+  },
+  ordervalueContainerNull: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: "none",
     padding: 10,
     borderRadius: 8,
   },
