@@ -39,6 +39,7 @@ type Restaurant = {
 
 const Index = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  console.log("This is id: ", id);
   const router = useRouter();
   const segments = useSegments();
   const currentPath = segments.join("/");
@@ -67,6 +68,60 @@ const Index = () => {
       return acc;
     }, {} as { [key: number]: number }) || {}
   );
+
+  useEffect(() => {
+    console.log("Entering 2nd UseEffect");
+
+    const checkToUpdate = async () => {
+      const data = await retrieveData();
+      if (data) {
+        console.log("Some data: ", data);
+        setAsyncStoreData(data);
+        console.log("Data.restaurantId: ", data.restaurantId);
+        console.log("Number(id): ", Number(id));
+        if (data.restaurantId === Number(id)) {
+          if (data.orders.length >= 0) {
+            console.log("This is toUpdate: ", true);
+
+            const updation = async () => {
+              const orderArray = Object.entries(quantities).map(
+                ([key, value]) => ({
+                  key,
+                  value,
+                })
+              );
+
+              const newOrderArray = orderArray.filter((ele) => ele.value >= 1);
+
+              dispatch(
+                setOrderDetails({
+                  restaurantId: restaurant?.id,
+                  restaurantName: restaurant?.name,
+                  orders: newOrderArray,
+                })
+              );
+
+              await storeData({
+                restaurantId: restaurant?.id,
+                restaurantName: restaurant?.name,
+                orders: newOrderArray,
+              });
+
+              console.log("Showing this log: ", {
+                restaurantId: restaurant?.id,
+                restaurantName: restaurant?.name,
+                orders: newOrderArray,
+              });
+            };
+
+            updation();
+          }
+        }
+      }
+    };
+
+    checkToUpdate();
+  }, [quantities]);
 
   // Handler to update quantity
   const handleQuantityChange = (dishId: number, quantity: number) => {

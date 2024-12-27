@@ -14,7 +14,7 @@ import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 
 const index = () => {
-  console.log(restaurantData);
+  // console.log(restaurantData);
 
   const router = useRouter();
 

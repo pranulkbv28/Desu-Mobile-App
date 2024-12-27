@@ -1,10 +1,21 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable, Button } from "react-native";
 import React from "react";
+import { clearData, retrieveData } from "@/utils/AsyncStorage";
 
 const index = () => {
+  const data = retrieveData();
+  console.log("This is the data in menu: ", data);
+
   return (
     <View>
-      <Text>This isMenu Page</Text>
+      <Pressable
+        onPress={() => {
+          clearData();
+          console.log(data);
+        }}
+      >
+        <Button title="Clear Order" />
+      </Pressable>
     </View>
   );
 };
