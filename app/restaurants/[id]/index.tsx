@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   Image,
   Pressable,
   Button,
   TextInput,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setOrder, addItemToOrder } from "@/features/orderSlice/newOrderSlice";
+import {
+  setOrder,
+  addItemToOrder,
+  removeItemFromOrder,
+} from "@/features/orderSlice/newOrderSlice";
 import { useRouter, useLocalSearchParams, useSegments } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Colors } from "@/constants/Colors";
 import OrderDetailContainer from "@/components/OrderDetailContainer";
@@ -69,60 +71,6 @@ const Index = () => {
     }, {} as { [key: number]: number }) || {}
   );
 
-  useEffect(() => {
-    console.log("Entering 2nd UseEffect");
-
-    const checkToUpdate = async () => {
-      const data = await retrieveData();
-      if (data) {
-        console.log("Some data: ", data);
-        setAsyncStoreData(data);
-        console.log("Data.restaurantId: ", data.restaurantId);
-        console.log("Number(id): ", Number(id));
-        if (data.restaurantId === Number(id)) {
-          if (data.orders.length >= 0) {
-            console.log("This is toUpdate: ", true);
-
-            const updation = async () => {
-              const orderArray = Object.entries(quantities).map(
-                ([key, value]) => ({
-                  key,
-                  value,
-                })
-              );
-
-              const newOrderArray = orderArray.filter((ele) => ele.value >= 1);
-
-              dispatch(
-                setOrderDetails({
-                  restaurantId: restaurant?.id,
-                  restaurantName: restaurant?.name,
-                  orders: newOrderArray,
-                })
-              );
-
-              await storeData({
-                restaurantId: restaurant?.id,
-                restaurantName: restaurant?.name,
-                orders: newOrderArray,
-              });
-
-              console.log("Showing this log: ", {
-                restaurantId: restaurant?.id,
-                restaurantName: restaurant?.name,
-                orders: newOrderArray,
-              });
-            };
-
-            updation();
-          }
-        }
-      }
-    };
-
-    checkToUpdate();
-  }, [quantities]);
-
   // Handler to update quantity
   const handleQuantityChange = (dishId: number, quantity: number) => {
     setQuantities((prevQuantities) => ({
@@ -145,6 +93,7 @@ const Index = () => {
       );
     }
 
+    console.log("This is quantity in handleQuantity: ", quantity);
     // Add item to order if quantity is greater than 0
     if (quantity > 0) {
       const dish = restaurant?.menu.find((item) => item.id === dishId);
@@ -152,6 +101,9 @@ const Index = () => {
       if (dish) {
         dispatch(addItemToOrder({ dish, quantity }));
       }
+    } else {
+      // Remove item from order if quantity is 0
+      dispatch(removeItemFromOrder(dishId));
     }
   };
 

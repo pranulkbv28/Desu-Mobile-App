@@ -9,7 +9,6 @@ import AppHeader from "@/components/AppHeader";
 import { Provider, useSelector } from "react-redux";
 import store from "@/store/store";
 import OrderDetailContainer from "@/components/OrderDetailContainer";
-import { retrieveData } from "@/utils/AsyncStorage";
 
 export default () => {
   const orders = useSelector((state: any) => state.order.orderDetails);
