@@ -27,7 +27,7 @@ const AppHeader = () => {
   useEffect(() => {
     // console.log({ isScrolling });
     isScrolling ? setShowComponent(true) : setShowComponent(false);
-    console.log(showComponent);
+    // console.log(showComponent);
   }, [isScrolling]);
 
   return (

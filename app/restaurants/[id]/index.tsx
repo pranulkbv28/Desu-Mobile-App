@@ -43,12 +43,12 @@ const Index = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   console.log("This is id: ", id);
   const router = useRouter();
-  const segments = useSegments();
-  const currentPath = segments.join("/");
+  // const segments = useSegments();
+  // const currentPath = segments.join("/");
   const dispatch = useDispatch();
   const currentOrder = useSelector((state: any) => state.newOrder);
 
-  console.log("Current Path from Restaurant details: ", currentPath);
+  // console.log("Current Path from Restaurant details: ", currentPath);
 
   const restaurant: Restaurant | undefined = restaurantData.find(
     (item) => item.id === Number(id)
@@ -63,9 +63,9 @@ const Index = () => {
   // State to track the quantities for each dish
   const [quantities, setQuantities] = useState<{ [key: number]: number }>(
     restaurant?.menu.reduce((acc, dish) => {
-      console.log("This is acc in acc: ", acc);
-      console.log("This is dish in acc: ", dish);
-      console.log("This is acc[dish.id] in acc: ", acc[dish.id]);
+      // console.log("This is acc in acc: ", acc);
+      // console.log("This is dish in acc: ", dish);
+      // console.log("This is acc[dish.id] in acc: ", acc[dish.id]);
       acc[dish.id] = 0; // Initial quantity is 0 for each dish
       return acc;
     }, {} as { [key: number]: number }) || {}
@@ -80,20 +80,20 @@ const Index = () => {
 
     console.log("This is current order: ", currentOrder.restaurantId);
     console.log("This is restaurant id: ", restaurant?.id);
-    console.log(
-      "Checking if the restaurant ID is different: ",
-      currentOrder.restaurantId === String(restaurant?.id)
-    );
+    // console.log(
+    //   "Checking if the restaurant ID is different: ",
+    //   currentOrder.restaurantId === String(restaurant?.id)
+    // );
 
     // If the restaurant ID is different, update the order
     if (currentOrder.restaurantId !== String(restaurant?.id)) {
-      console.log("Entering if in handleQuantityChange");
+      // console.log("Entering if in handleQuantityChange");
       dispatch(
         setOrder({ restaurantId: String(restaurant?.id), orderDetails: [] })
       );
     }
 
-    console.log("This is quantity in handleQuantity: ", quantity);
+    // console.log("This is quantity in handleQuantity: ", quantity);
     // Add item to order if quantity is greater than 0
     if (quantity > 0) {
       const dish = restaurant?.menu.find((item) => item.id === dishId);
@@ -118,11 +118,11 @@ const Index = () => {
     }
   }
 
-  console.log("This is restaurantId in Index: ", restaurant?.id);
-  console.log(
-    "This is currentOrderRestaurantId in Index: ",
-    currentOrder.restaurantId
-  );
+  // console.log("This is restaurantId in Index: ", restaurant?.id);
+  // console.log(
+  //   "This is currentOrderRestaurantId in Index: ",
+  //   currentOrder.restaurantId
+  // );
 
   return (
     <>

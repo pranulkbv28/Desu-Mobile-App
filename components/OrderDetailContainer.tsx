@@ -13,67 +13,67 @@ const OrderDetailContainer = ({
   restaurantId?: number;
   currentOrderRestaurantId?: number;
 }) => {
-  const orders = useSelector((state: any) => state.order.orderDetails);
+  // const orders = useSelector((state: any) => state.order.orderDetails);
   const newOrders = useSelector((state: any) => state.newOrder);
   const [message, setMessage] = useState("");
 
   const router = useRouter();
 
   console.log("This is the new order in OrderDetails: ", newOrders);
-  console.log("Testing: ", Object.keys(newOrders));
-  console.log("This is restaurantId in OrderDetails: ", restaurantId);
-  console.log(
-    "This is currentOrderRestaurantId in OrderDetails: ",
-    currentOrderRestaurantId
-  );
+  // console.log("Testing: ", Object.keys(newOrders));
+  // console.log("This is restaurantId in OrderDetails: ", restaurantId);
+  // console.log(
+  //   "This is currentOrderRestaurantId in OrderDetails: ",
+  //   currentOrderRestaurantId
+  // );
 
-  const totalItems = orders.orders
-    .map((ele: any) => ele["value"])
-    .reduce((acc: any, ele: any) => acc + ele, 0);
+  // const totalItems = orders.orders
+  //   .map((ele: any) => ele["value"])
+  //   .reduce((acc: any, ele: any) => acc + ele, 0);
 
   const totalQuantity = newOrders.orderDetails
     .map((ele: any) => ele.quantity)
     .reduce((total: any, dishQty: any) => total + dishQty, 0);
 
   const handlePress = () => {
-    console.log("handlePress called");
-    console.log("restaurantId:", restaurantId);
-    console.log("currentOrderRestaurantId:", currentOrderRestaurantId);
-    console.log("page:", page);
+    // console.log("handlePress called");
+    // console.log("restaurantId:", restaurantId);
+    // console.log("currentOrderRestaurantId:", currentOrderRestaurantId);
+    // console.log("page:", page);
 
     if (restaurantId && currentOrderRestaurantId) {
       if (restaurantId === currentOrderRestaurantId) {
-        console.log("Entering null if statement");
-        setMessage("Go to Checkout");
+        // console.log("Entering null if statement");
+        // setMessage("Go to Checkout");
         router.push("/checkout");
       } else {
-        console.log("Entering else statement after null if");
-        setMessage("Go to Restaurant");
-        console.log(
-          "This is currentOrderRestaurantId: ",
-          currentOrderRestaurantId
-        );
+        // console.log("Entering else statement after null if");
+        // setMessage("Go to Restaurant");
+        // console.log(
+        //   "This is currentOrderRestaurantId: ",
+        //   currentOrderRestaurantId
+        // );
         router.push(`/restaurants/${currentOrderRestaurantId}`);
       }
     } else {
       if (page === "home") {
-        console.log("Entering home if statement");
-        setMessage("Go to Restaurant from list");
-        console.log(
-          "This is currentOrderRestaurantId: ",
-          currentOrderRestaurantId
-        );
+        // console.log("Entering home if statement");
+        // setMessage("Go to Restaurant from list");
+        // console.log(
+        //   "This is currentOrderRestaurantId: ",
+        //   currentOrderRestaurantId
+        // );
         router.push(`/restaurants/${newOrders.restaurantId}`);
       } else {
-        console.log("Entering home else statement");
+        // console.log("Entering home else statement");
         setMessage("Something went wrong");
       }
     }
   };
 
-  useEffect(() => {
-    console.log("This is message: ", message);
-  }, [message]);
+  // useEffect(() => {
+  //   console.log("This is message: ", message);
+  // }, [message]);
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>

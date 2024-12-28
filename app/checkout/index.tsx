@@ -19,10 +19,10 @@ const Index = () => {
   const currentOrder = useSelector((state: any) => state.newOrder);
 
   console.log("This is the current order in checkout: ", currentOrder);
-  console.log(
-    "This is the current order in checkout with orderDetails: ",
-    currentOrder.orderDetails
-  );
+  // console.log(
+  //   "This is the current order in checkout with orderDetails: ",
+  //   currentOrder.orderDetails
+  // );
 
   function getDishData(dishId: number) {
     return dishData.find((dish) => dish.id === dishId);
@@ -30,7 +30,7 @@ const Index = () => {
 
   const dish = getDishData(currentOrder.orderDetails[0].dish.id);
 
-  console.log("This is the dish in checkout: ", dish);
+  // console.log("This is the dish in checkout: ", dish);
 
   function getSubTotal() {
     let subTotal = 0;
@@ -41,7 +41,7 @@ const Index = () => {
     return subTotal;
   }
 
-  console.log("This is the subTotal in checkout: ", getSubTotal());
+  // console.log("This is the subTotal in checkout: ", getSubTotal());
 
   return (
     <View style={styles.container}>
