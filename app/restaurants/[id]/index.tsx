@@ -200,7 +200,7 @@ const Index = () => {
           </View>
         ))}
       </ScrollView>
-      {currentOrder.orderDetails.length > 0 ? (
+      {currentOrder?.orderDetails?.length > 0 ? (
         <OrderDetailContainer
           restaurantId={restaurant?.id}
           currentOrderRestaurantId={Number(currentOrder.restaurantId)}

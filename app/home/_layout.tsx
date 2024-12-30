@@ -73,7 +73,7 @@ export default () => {
           }}
         />
       </Tabs>
-      {newOrders.length > 0 ? <OrderDetailContainer page="home" /> : null}
+      {newOrders?.length > 0 ? <OrderDetailContainer page="home" /> : null}
     </>
   );
 };
