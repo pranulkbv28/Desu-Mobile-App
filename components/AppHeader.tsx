@@ -31,11 +31,16 @@ const AppHeader = () => {
   }, [isScrolling]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        currentPath === "home" ? styles.containerPaddingBottom : null,
+      ]}
+    >
       {/* {isScrolling && (
         
       )} */}
-      <View style={styles.header}>
+      <View style={[styles.header]}>
         <View style={styles.iconContainer}>
           <AntDesign name="user" size={14} color={Colors.white.background} />
         </View>
@@ -64,9 +69,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.appGreen,
     paddingTop: 50,
-    paddingBottom: 10,
+    // paddingBottom: 10,
     paddingHorizontal: 20,
-    // marginBottom: -70,
+    // marginBottom: -90,
+    zIndex: 100,
+    position: "relative",
+  },
+  containerPaddingBottom: {
+    paddingBottom: 150,
   },
   header: {
     flexDirection: "row",

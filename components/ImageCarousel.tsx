@@ -4,6 +4,7 @@ import Image1 from "@/assets/images/petHealthyFood.png";
 import Image2 from "@/assets/images/petHealthyFood2.jpg";
 import Image3 from "@/assets/images/petHealthyFood3.jpg";
 import Image4 from "@/assets/images/petHealthyFood4.jpg";
+import { Colors } from "@/constants/Colors";
 
 const ImageCarousel = () => {
   const images = [Image1, Image2, Image3, Image4];
@@ -55,7 +56,14 @@ const ImageCarousel = () => {
     ));
 
   return (
-    <View>
+    <View
+      style={{
+        position: "absolute",
+        marginBottom: -60,
+        bottom: 0,
+        left: "5%",
+      }}
+    >
       <FlatList
         data={images}
         renderItem={renderItem}
@@ -69,6 +77,7 @@ const ImageCarousel = () => {
         ref={flatListRef}
         getItemLayout={getItemLayout}
         scrollEventThrottle={16}
+        style={{ borderRadius: 20 }}
       />
       <View style={styles.dotsContainer}>{renderDots()}</View>
     </View>
@@ -91,6 +100,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 16,
+    position: "absolute",
+    bottom: -25,
+    left: "40%",
+    // backgroundColor: "red",
+    zIndex: 100,
+    elevation: 100,
   },
   dot: {
     height: 10,
@@ -99,7 +114,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   activeDot: {
-    backgroundColor: "white",
+    backgroundColor: Colors.appGreen,
   },
   inactiveDot: {
     backgroundColor: "#a6a6a6",
