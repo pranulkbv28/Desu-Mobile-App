@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Animated } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Tabs } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -9,6 +10,8 @@ import AppHeader from "@/components/AppHeader";
 import { Provider, useSelector } from "react-redux";
 import store from "@/store/store";
 import OrderDetailContainer from "@/components/OrderDetailContainer";
+import Index from "@/app/home";
+import { scrollY } from "@/constants/constants";
 
 export default () => {
   const orders = useSelector((state: any) => state.order.orderDetails);
@@ -16,9 +19,25 @@ export default () => {
 
   console.log("This is the new order in Home: ", newOrders.length);
 
+  const paddingForImageCarousel = 150;
+  const heightScrollY = scrollY;
+  const diffClamScrollY = Animated.diffClamp(
+    heightScrollY,
+    0,
+    paddingForImageCarousel
+  );
+  const headerY = diffClamScrollY.interpolate({
+    inputRange: [0, paddingForImageCarousel],
+    outputRange: [0, -paddingForImageCarousel],
+    extrapolate: "clamp",
+  });
+
   return (
     <>
-      <AppHeader />
+      <AppHeader
+        paddingForImageCarousel={paddingForImageCarousel}
+        headerY={headerY}
+      />
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors.white.background,

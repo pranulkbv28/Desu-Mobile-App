@@ -13,8 +13,15 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useSegments } from "expo-router";
 import ImageCarousel from "@/components/ImageCarousel";
 import { useSelector } from "react-redux";
+import { Animated } from "react-native";
 
-const AppHeader = () => {
+const AppHeader = ({
+  paddingForImageCarousel,
+  headerY,
+}: {
+  paddingForImageCarousel?: any;
+  headerY?: any;
+}) => {
   const segments = useSegments();
   const currentPath = segments.join("/");
 
@@ -31,10 +38,15 @@ const AppHeader = () => {
   }, [isScrolling]);
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
-        currentPath === "home" ? styles.containerPaddingBottom : null,
+        currentPath === "home"
+          ? {
+              paddingBottom: paddingForImageCarousel,
+              transform: [{ translateY: headerY }],
+            }
+          : null,
       ]}
     >
       {/* {isScrolling && (
@@ -59,7 +71,7 @@ const AppHeader = () => {
         </View>
       )}
       {currentPath === "home" && <ImageCarousel />}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -75,9 +87,9 @@ const styles = StyleSheet.create({
     zIndex: 100,
     position: "relative",
   },
-  containerPaddingBottom: {
-    paddingBottom: 150,
-  },
+  // containerPaddingBottom: {
+  //   paddingBottom: paddingForImageCarousel,
+  // },
   header: {
     flexDirection: "row",
     alignItems: "center",

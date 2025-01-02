@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Animated,
 } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -18,8 +19,9 @@ import foodCard2 from "@/assets/images/foodCard2.png";
 import foodCard3 from "@/assets/images/foodCard3.png";
 import deliveryCard from "@/assets/images/deliveryCard.png";
 import { Colors } from "@/constants/Colors";
+import { scrollY } from "@/constants/constants";
 
-const Index = () => {
+const Index = ({ carouselTranslateY }: { carouselTranslateY?: any }) => {
   const SCROLL_THRESHOLD = 100;
 
   const dispatch = useDispatch();
@@ -39,7 +41,15 @@ const Index = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <ScrollView contentContainerStyle={styles.body} onScroll={handleScroll}>
+        <Animated.ScrollView
+          scrollEventThrottle={16}
+          contentContainerStyle={styles.body}
+          onScroll={Animated.event([
+            {
+              nativeEvent: { contentOffset: { y: scrollY } },
+            },
+          ])}
+        >
           <View>
             <View
               style={{
@@ -199,7 +209,7 @@ const Index = () => {
               For Purchases over ₹999
             </Text>
           </View>
-        </ScrollView>
+        </Animated.ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaProvider>
   );
